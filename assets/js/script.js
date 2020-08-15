@@ -8,6 +8,8 @@ var formEl = document.querySelector( "#task-form" );
 /* Define a variable for the "to do list". */
 var tasksToDoEl = document.querySelector( "#tasks-to-do" );
 
+
+/* ///////////////////////////////////////////////////////////////////////////////////  */
 /* Define an anonymous function to create a new task item  */
 var taskFormHandler = function( event ) {
 
@@ -16,6 +18,15 @@ var taskFormHandler = function( event ) {
     /* Obtain the task name and type just defined from the input form. */
     var taskNameInput = document.querySelector( "input[name='task-name']").value;
     var taskTypeInput = document.querySelector( "select[name='task-type']").value;
+
+    /* Verify that input was provided to both form controls. */
+    if( !taskNameInput  ||  !taskTypeInput ) {
+        alert( "You need to define a task and select a type!");
+        return false;
+    }
+
+    /* Blank out any earlier data from the form. */
+    formEl.reset();                              /* this works since 'formEl' is global. */
     
     /* Package this data in an 'object' to pas on to the 'createTaskEl' function. */
     var taskDataObj = {
