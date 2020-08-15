@@ -9,7 +9,7 @@ var formEl = document.querySelector( "#task-form" );
 var tasksToDoEl = document.querySelector( "#tasks-to-do" );
 
 /* Define an anonymous function to create a new task item  */
-var createTaskHandler = function( event ) {
+var taskFormHandler = function( event ) {
 
     event.preventDefault();                            /* prevent the browser from reloading the page. */
 
@@ -17,6 +17,20 @@ var createTaskHandler = function( event ) {
     var taskNameInput = document.querySelector( "input[name='task-name']").value;
     var taskTypeInput = document.querySelector( "select[name='task-type']").value;
     
+    /* Package this data in an 'object' to pas on to the 'createTaskEl' function. */
+    var taskDataObj = {
+        name: taskNameInput,
+        type: taskTypeInput
+    };
+
+    /* Put the new task on the page. */
+    createTaskEl( taskDataObj );
+    
+}
+
+/* ///////////////////////////////////////////////////////////////////////////////////  */
+/* Define the function to create the HTML for a newly added task. */
+var createTaskEl = function( taskDataObj ){
 
     var listItemEl = document.createElement( "li" );   /* create the "li" item/selector. */
     listItemEl.className = "task-item";                /* assign the proper class to this new item. */
@@ -26,7 +40,7 @@ var createTaskHandler = function( event ) {
     taskInfoEl.className = "task-info";                /* give the 'div' a class name
 
     /* Add content and style to this new 'div' element */
-    taskInfoEl.innerHTML = "<h3 class-'task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+    taskInfoEl.innerHTML = "<h3 class-'task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
 
     /* Put things all together using .appendChild */
     listItemEl.appendChild( taskInfoEl );              /* this adds the 'h3' and 'span' data */
@@ -34,4 +48,4 @@ var createTaskHandler = function( event ) {
 }
 
 /* Setup the (form) event handler and call-back function .  When the form is submitted the handler will create a new task. The "submit" event is invoked when a button with 'type=submit' is clicked, or the user presses '[Enter]'. */
-formEl.addEventListener( "submit", createTaskHandler );
+formEl.addEventListener( "submit", taskFormHandler );
