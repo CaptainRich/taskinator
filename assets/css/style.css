@@ -66,6 +66,7 @@ footer {
   font-size: 2.4rem;
   padding: 20px;
   border-top: 5px solid var(--primary);
+  margin-top: 10px;            /* added to avoid touching the footer area */
 }
 
 .page-title {
