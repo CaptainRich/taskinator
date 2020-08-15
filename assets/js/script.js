@@ -5,7 +5,7 @@ var buttonEl = document.querySelector("#save-task");
 /* Define a variable for the "to do list". */
 var tasksToDoEl = document.querySelector( "#tasks-to-do" );
 
-/* Define the function to create a new task item  */
+/* Define an anonymous function to create a new task item  */
 var createTaskHandler = function() {
     var listItemEl = document.createElement( "li" );   /* create the "li" item/selector. */
     listItemEl.className = "task-item";                /* assign the proper class to this new item. */
