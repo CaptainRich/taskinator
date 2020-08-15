@@ -11,6 +11,9 @@ var tasksToDoEl = document.querySelector( "#tasks-to-do" );
 // Define a variable to be used as a task ID value. */
 var taskIdCounter = 0;
 
+// Define a variable for the main page so an event listener for the action buttons can be implemented.
+var pageContentEl = document.querySelector( "#page-content" );
+
 
 // ///////////////////////////////////////////////////////////////////////////////////  
 //Define an anonymous function to create a new task item  
@@ -117,7 +120,21 @@ var createTaskActions = function( taskId ) {
     return actionContainerEl;
 }
 
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the 'task button handler' function.
+var taskButtonHandler = function( event ) {
+    console.log( event.target );
+
+    if( event.target.matches( ".delete-btn")) {
+        console.log( "You clicked a delete button.");
+    };
+};
+
 // /////////////////////////////////////////////////////////////////////////////////// 
 // Setup the (form) event handler and call-back function .  When the form is submitted the handler will create a new task. 
 // The "submit" event is invoked when a button with 'type=submit' is clicked, or the user presses '[Enter]'. 
 formEl.addEventListener( "submit", taskFormHandler );
+
+// Add the evemnt listener for the main page to determine when the edit/delete/action controls were activated.
+pageContentEl.addEventListener( "click", taskButtonHandler );
