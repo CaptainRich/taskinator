@@ -264,10 +264,26 @@ var dropZoneDragHandler = function( event ) {
     // Disable the default behavior preventing us dropping this object
     if( taskListEl ) {
         event.preventDefault();
+
+        // Also, change the background style to indicate a valid drop zone area
+        taskListEl.setAttribute( "style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;" );
         
     }
 
 }
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the event handler for the 'drag leave' event.
+var dragLeaveHandler = function( event ) {
+
+        // Determine if we are 'leaving' a "task list" zone, and if so remove the style
+        var taskListEl = event.target.closest(".task-list");
+        if( taskListEl ) {
+            taskListEl.removeAttribute( "style" );
+        }
+}
+
 
 
 // /////////////////////////////////////////////////////////////////////////////////// 
@@ -299,6 +315,9 @@ var dropTaskHandler = function( event ) {
 
     // Append the dropped task to its new parent list.
     dropZoneEl.appendChild( draggableElement );
+
+    // Remove the "valid drop zone" style added in the 'dropZoneDragHandler'
+    dropZoneEl.removeAttribute( "style" );
 }
 
 
@@ -321,3 +340,6 @@ pageContentEl.addEventListener( "dragover", dropZoneDragHandler );
 
 // Add an evet listener for the 'drop' event.
 pageContentEl.addEventListener( "drop", dropTaskHandler );
+
+// Add an event listener for the 'drag leave' event.
+pageContentEl.addEventListener( "dragleave", dragLeaveHandler );
