@@ -388,6 +388,64 @@ var saveTasks = function() {
 
 
 // /////////////////////////////////////////////////////////////////////////////////// 
+// Define the function to load all the tasks from 'localStorage'
+var loadTasks = function() {
+
+    // Get the tasks from local storage
+    tasks = localStorage.getItem( "tasks" );
+
+    if( tasks === null ) {
+        tasks = [];             // make sure tasks IS NOT null
+        return false;
+    }
+ 
+    // Convert the tasks from stringified format back into an array of objects
+    tasks = JSON.parse( tasks );
+    
+ 
+    // Iterate throught the array and create the tasks elements on the page.
+    for( var i = 0; i < tasks.length; i++ ) {
+
+        tasks[i].id = taskIdCounter;            // reassign the task Id values.
+
+        var listItemEl = document.createElement( "li" );   // create the "li" item/selector. 
+        listItemEl.className = "task-item";                // assign the proper class to this new item. 
+    
+        // Add a 'task-id' value as a custom attribute, so we know which task is which. 
+        listItemEl.setAttribute("data-task-id", tasks[i].id );
+        listItemEl.setAttribute("draggable", "true");      // also set this element to be draggable
+    
+        // Create a 'div' to hold the task info and add it to the list item just created. 
+        var taskInfoEl = document.createElement( "div" );
+        taskInfoEl.className = "task-info";                // give the 'div' a class name
+    
+        // Add content and style to this new 'div' element 
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+    
+        // Put things all together using .appendChild 
+        listItemEl.appendChild( taskInfoEl );                    // this adds the 'h3' and 'span' data 
+        var taskActionsEl = createTaskActions( tasks[i].id );    // create the action buttons
+        listItemEl.appendChild( taskActionsEl );                 // add the buttons to the 'li'
+      
+        // Now we need to put the tasks into the appropriate status columns
+        if( tasks[i].status === "to do" ) {
+            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 0;
+        }
+        else if( tasks[i].status === "in progress" ) {
+            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 1;
+        }
+        else if( tasks[i].status === "complete" ) {
+            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 2;
+        }
+    
+        // Increment the 'task-id' value.
+        taskIdCounter++; 
+    }
+}
+
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
 // Setup the (form) event handler and call-back function .  When the form is submitted the handler will create a new task. 
 // The "submit" event is invoked when a button with 'type=submit' is clicked, or the user presses '[Enter]'. 
 formEl.addEventListener( "submit", taskFormHandler );
@@ -409,3 +467,6 @@ pageContentEl.addEventListener( "drop", dropTaskHandler );
 
 // Add an event listener for the 'drag leave' event.
 pageContentEl.addEventListener( "dragleave", dragLeaveHandler );
+
+
+loadTasks();
