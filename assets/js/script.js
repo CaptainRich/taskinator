@@ -18,6 +18,10 @@ var pageContentEl = document.querySelector( "#page-content" );
 var tasksInProgressEl = document.querySelector( "#tasks-in-progress" );
 var tasksCompletedEl  = document.querySelector( "#tasks-completed" );
 
+// Define an empty array, which will hold "task objects" to enable persistence (using 'localstorage').
+var tasks = [];             // this will eventually hold 'task objects', for storage and retrieval.
+
+
 
 // ///////////////////////////////////////////////////////////////////////////////////  
 //Define an anonymous function to create a new task item  
@@ -52,7 +56,8 @@ var taskFormHandler = function( event ) {
         // Package this data in an 'object' to pass on to the 'createTaskEl' function. 
         var taskDataObj = {
             name: taskNameInput,
-            type: taskTypeInput
+            type: taskTypeInput,
+            status: "to do"                 // known status for newly created tasks
         };
 
         // Put the new task on the page. 
@@ -73,7 +78,7 @@ var taskStatusChangeHandler = function( event ) {
     // Find the parent task item element based on id
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']" );
 
-    // Based on the selected option, put the task in the corresponding culumn.
+    // Based on the selected option, put the task in the corresponding column.
 
     if( statusValue === "to do") {
         tasksToDoEl.appendChild( taskSelected );
@@ -84,6 +89,13 @@ var taskStatusChangeHandler = function( event ) {
     else if ( statusValue === "completed" ) {
         tasksCompletedEl.appendChild( taskSelected );
 
+    }
+
+    // Make sure the proper status is maintained in the 'tasks' array for proper persistence.
+    for( var i = 0; i < tasks.length; i++ ) {
+        if( tasks[i].id === parseInt(taskId) ) {
+            tasks[i].status = statusValue;
+         }
     }
 };
 
@@ -111,8 +123,12 @@ var createTaskEl = function( taskDataObj ){
     listItemEl.appendChild( taskActionsEl );                 // add the buttons to the 'li'
     tasksToDoEl.appendChild( listItemEl );                   // add the new "li"  to its parent, the "ul" item    
 
+    // Update the 'task object' with its task id value, then put the oject into the array.
+    taskDataObj.id = taskIdCounter;
+    tasks.push( taskDataObj );             // now push (put) this object into the array 'taskDataObj'
+
     // Increment the 'task-id' value.
-    taskIdCounter++;
+    taskIdCounter++; 
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////  
@@ -222,6 +238,16 @@ var completeEditTask = function( taskName, taskType, taskId ) {
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
 
+    // Update the 'tasks' array so proper persistence can be maintained.
+    // Loop through the 'tasks' array looking for the proper Id.
+    for( var i = 0; i < tasks.length; i++ ) {
+        if( tasks[i].id === parseInt(taskId) ) {
+            tasks[i].name = taskName;             // update the Name and Type for the matching task
+            tasks[i].type = taskType;
+        }
+    }
+
+
     alert( "Task has been updated!" );
 
     // Reset the form by removing the 'data-task-id' and putting the button text back to normal
@@ -236,6 +262,21 @@ var taskDelete = function( taskId ) {
     // Find the task associated with 'taskId', and delete it.
     var taskSelected = document.querySelector( ".task-item[data-task-id='" + taskId + "']" );
     taskSelected.remove();
+
+    // To maintain persistence, the deleted task must be removed from the 'tasks' array also.  Do this by
+    // first creating a new array with the tasks we're going to keep.
+
+    var updatedTaskArr = [];
+
+    for( var i = 0; i < tasks.length; i++ ) {
+        if( tasks[i].id !== parseInt(taskId) ) {
+            // We want to keep this task, since its Id doesn't match the Id of the task being deleted.
+            updatedTaskArr.push( tasks[i] ) ;
+        }
+    }
+
+    // Finally reassign the 'tasks' array to be equal to the 'updatedTaskArr'.
+    tasks = updatedTaskArr;
 }
 
 
@@ -318,6 +359,13 @@ var dropTaskHandler = function( event ) {
 
     // Remove the "valid drop zone" style added in the 'dropZoneDragHandler'
     dropZoneEl.removeAttribute( "style" );
+
+    // Also need to update the tasks status in the 'tasks' array to maintain persistence
+    for( var i = 0; i < tasks.length; i++ ) {
+        if( tasks[i].id === parseInt(id) ) {
+            tasks[i].status = statusSelectEl.value.toLowerCase();
+        }
+    }
 }
 
 
