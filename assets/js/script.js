@@ -96,6 +96,7 @@ var createTaskEl = function( taskDataObj ){
 
     // Add a 'task-id' value as a custom attribute, so we know which task is which. 
     listItemEl.setAttribute("data-task-id", taskIdCounter );
+    listItemEl.setAttribute("draggable", "true");      // also set this element to be draggable
 
     // Create a 'div' to hold the task info and add it to the list item just created. 
     var taskInfoEl = document.createElement( "div" );
@@ -232,9 +233,72 @@ var completeEditTask = function( taskName, taskType, taskId ) {
 // Define the 'delete task' function.
 var taskDelete = function( taskId ) {
 
-    // Find the task associated with 'taskId'
+    // Find the task associated with 'taskId', and delete it.
     var taskSelected = document.querySelector( ".task-item[data-task-id='" + taskId + "']" );
     taskSelected.remove();
+}
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the event handler function for the drag/drop operation
+var dragTaskHandler = function( event ) {
+
+    // Get the task Id for the event
+    var taskId = event.target.getAttribute("data-task-id");
+   
+    // Store this Id in the "dataTransfer" property of the (drag) event object
+    event.dataTransfer.setData("text/plain", taskId);      // format and value
+
+    var getId = event.dataTransfer.getData("text/plain");
+    console.log("getId:", getId, typeof getId);
+}
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the event handler function for the dropzone event.
+var dropZoneDragHandler = function( event ) {
+
+    // Determine if the dropzone is over a "task list", which is what we want
+    var taskListEl = event.target.closest(".task-list");
+
+    // Disable the default behavior preventing us dropping this object
+    if( taskListEl ) {
+        event.preventDefault();
+        
+    }
+
+}
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the event handler function for the 'drop' event.
+var dropTaskHandler = function( event ) {
+
+    // Get the drop target's id
+    var id = event.dataTransfer.getData( "text/plain" );
+
+    // Get the id of the 'dragged' task item.
+    var draggableElement = document.querySelector("[data-task-id='" + id + "']");
+
+    // Get the dropzone where our task was dropped.
+    var dropZoneEl = event.target.closest(".task-list");
+    var statusType = dropZoneEl.id;
+
+    // Set the status of our task based on the new dropzone id
+    var statusSelectEl = draggableElement.querySelector("select[name='status-change']");
+    
+    if( statusType === "tasks-to-do" )  {
+        statusSelectEl.selectedIndex = 0;
+    }
+    else if( statusType === "tasks-in-progress" ){
+        statusSelectEl.selectedIndex = 1;
+    }
+    else if( statusType === "tasks-completed" ){
+        statusSelectEl.selectedIndex = 2;
+    }
+
+    // Append the dropped task to its new parent list.
+    dropZoneEl.appendChild( draggableElement );
 }
 
 
@@ -246,5 +310,14 @@ formEl.addEventListener( "submit", taskFormHandler );
 // Add the evemnt listener for the main page to determine when the edit/delete/action controls were activated.
 pageContentEl.addEventListener( "click", taskButtonHandler );
 
-// Add an event listenter to detect a change in task status
+// Add an event listenter for the main page to detect a change in task status
 pageContentEl.addEventListener( "change", taskStatusChangeHandler );
+
+// Add an event listenter for the main page to detect the drag/drop action
+pageContentEl.addEventListener( "dragstart", dragTaskHandler );
+
+// Add an event listener for the 'drag over' event.
+pageContentEl.addEventListener( "dragover", dropZoneDragHandler );
+
+// Add an evet listener for the 'drop' event.
+pageContentEl.addEventListener( "drop", dropTaskHandler );
