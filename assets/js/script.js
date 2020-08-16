@@ -127,9 +127,23 @@ var taskButtonHandler = function( event ) {
     console.log( event.target );
 
     if( event.target.matches( ".delete-btn")) {
-        console.log( "You clicked a delete button.");
+        // Get the element's (the button's) task id
+        var taskId = event.target.getAttribute("data-task-id");
+
+        // Delete the task with Id = 'taskId'
+        taskDelete( taskId );
     };
 };
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the 'delete task' function.
+var taskDelete = function( taskId ) {
+
+    // Find the task associated with 'taskId'
+    var taskSelected = document.querySelector( ".task-item[data-task-id='" + taskId + "']" );
+    taskSelected.remove();
+}
+
 
 // /////////////////////////////////////////////////////////////////////////////////// 
 // Setup the (form) event handler and call-back function .  When the form is submitted the handler will create a new task. 
