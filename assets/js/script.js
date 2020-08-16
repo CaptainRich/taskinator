@@ -97,6 +97,8 @@ var taskStatusChangeHandler = function( event ) {
             tasks[i].status = statusValue;
          }
     }
+
+    saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
 };
 
 // ///////////////////////////////////////////////////////////////////////////////////  
@@ -126,6 +128,7 @@ var createTaskEl = function( taskDataObj ){
     // Update the 'task object' with its task id value, then put the oject into the array.
     taskDataObj.id = taskIdCounter;
     tasks.push( taskDataObj );             // now push (put) this object into the array 'taskDataObj'
+    saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
 
     // Increment the 'task-id' value.
     taskIdCounter++; 
@@ -247,6 +250,8 @@ var completeEditTask = function( taskName, taskType, taskId ) {
         }
     }
 
+    saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
+
 
     alert( "Task has been updated!" );
 
@@ -277,6 +282,7 @@ var taskDelete = function( taskId ) {
 
     // Finally reassign the 'tasks' array to be equal to the 'updatedTaskArr'.
     tasks = updatedTaskArr;
+    saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
 }
 
 
@@ -291,8 +297,7 @@ var dragTaskHandler = function( event ) {
     event.dataTransfer.setData("text/plain", taskId);      // format and value
 
     var getId = event.dataTransfer.getData("text/plain");
-    console.log("getId:", getId, typeof getId);
-}
+ }
 
 
 // /////////////////////////////////////////////////////////////////////////////////// 
@@ -366,6 +371,19 @@ var dropTaskHandler = function( event ) {
             tasks[i].status = statusSelectEl.value.toLowerCase();
         }
     }
+
+    saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
+}
+
+
+// /////////////////////////////////////////////////////////////////////////////////// 
+// Define the function to save all the tasks to 'localStorage'
+var saveTasks = function() {
+
+    // When pushing to 'localStorage' (which converts everything to a string), use a JSON converstion 
+    // so we can have a visual of what got stored.
+    localStorage.setItem( "tasks", JSON.stringify(tasks) );
+ 
 }
 
 
