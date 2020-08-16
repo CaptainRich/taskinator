@@ -14,6 +14,10 @@ var taskIdCounter = 0;
 // Define a variable for the main page so an event listener for the action buttons can be implemented.
 var pageContentEl = document.querySelector( "#page-content" );
 
+// Define variables need to track the task status
+var tasksInProgressEl = document.querySelector( "#tasks-in-progress" );
+var tasksCompletedEl  = document.querySelector( "#tasks-completed" );
+
 
 // ///////////////////////////////////////////////////////////////////////////////////  
 //Define an anonymous function to create a new task item  
@@ -33,17 +37,55 @@ var taskFormHandler = function( event ) {
 
     // Blank out any earlier data from the form. 
     formEl.reset();                              // this works since 'formEl' is global. 
-    
-    // Package this data in an 'object' to pas on to the 'createTaskEl' function. 
-    var taskDataObj = {
-        name: taskNameInput,
-        type: taskTypeInput
-    };
 
-    // Put the new task on the page. 
-    createTaskEl( taskDataObj );
-    
+    // Detect if a task is being added (created) or edited
+    var isEdit = formEl.hasAttribute( "data-task-id" );
+
+    // Based on whether or not the form has the 'data-task-id' decide if we are adding
+    // or editing a task.
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+    else {  // There was no 'data-task-id' attribute, this is a new task to be added (created)
+
+        // Package this data in an 'object' to pass on to the 'createTaskEl' function. 
+        var taskDataObj = {
+            name: taskNameInput,
+            type: taskTypeInput
+        };
+
+        // Put the new task on the page. 
+        createTaskEl(taskDataObj);
+    } 
 }
+
+// ///////////////////////////////////////////////////////////////////////////////////  
+// Define the function to change the status of a task
+var taskStatusChangeHandler = function( event ) {
+    
+    // Get the Id of the task item to be moved.
+    var taskId = event.target.getAttribute("data-task-id");
+
+    // Get the currently selected opition (the current status), and convert to lower case
+    var statusValue = event.target.value.toLowerCase();
+
+    // Find the parent task item element based on id
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']" );
+
+    // Based on the selected option, put the task in the corresponding culumn.
+
+    if( statusValue === "to do") {
+        tasksToDoEl.appendChild( taskSelected );
+    }
+    else if( statusValue === "in progress" ) {
+        tasksInProgressEl.appendChild( taskSelected );
+    }
+    else if ( statusValue === "completed" ) {
+        tasksCompletedEl.appendChild( taskSelected );
+
+    }
+};
 
 // ///////////////////////////////////////////////////////////////////////////////////  
 // Define the function to create the HTML for a newly added task. 
@@ -169,6 +211,24 @@ var editTask = function( taskId ){
 }
 
 // /////////////////////////////////////////////////////////////////////////////////// 
+// Finish off the 'edit task' function.
+var completeEditTask = function( taskName, taskType, taskId ) {
+    
+    // Need to find the matching "task list" item
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']" );
+
+    // Set the new (edited) values
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert( "Task has been updated!" );
+
+    // Reset the form by removing the 'data-task-id' and putting the button text back to normal
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+}
+
+// /////////////////////////////////////////////////////////////////////////////////// 
 // Define the 'delete task' function.
 var taskDelete = function( taskId ) {
 
@@ -185,3 +245,6 @@ formEl.addEventListener( "submit", taskFormHandler );
 
 // Add the evemnt listener for the main page to determine when the edit/delete/action controls were activated.
 pageContentEl.addEventListener( "click", taskButtonHandler );
+
+// Add an event listenter to detect a change in task status
+pageContentEl.addEventListener( "change", taskStatusChangeHandler );
