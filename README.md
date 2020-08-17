@@ -27,4 +27,4 @@ The deployment link to display the updated web page is:
 
 ## Application Screen Shot
 
-[Password Generator Image](https://github.com/CaptainRich/taskinator/blob/master/screenshot.png)
+[Password Generator Image](https://github.com/CaptainRich/taskinator/blob/master/screenshot.jpg)
