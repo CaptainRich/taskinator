@@ -395,8 +395,8 @@ var loadTasks = function() {
     tasks = localStorage.getItem( "tasks" );
 
     if( tasks === null ) {
-        tasks = [];             // make sure tasks IS NOT null
-        return false;
+        tasks= [];
+        return false;             // nothing in browsers local storage
     }
  
     // Convert the tasks from stringified format back into an array of objects
@@ -430,13 +430,18 @@ var loadTasks = function() {
         // Now we need to put the tasks into the appropriate status columns
         if( tasks[i].status === "to do" ) {
             listItemEl.querySelector( "select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
         }
         else if( tasks[i].status === "in progress" ) {
             listItemEl.querySelector( "select[name='status-change']").selectedIndex = 1;
+            tasksInProgressEl.appendChild(listItemEl);
         }
-        else if( tasks[i].status === "complete" ) {
+        else if( tasks[i].status === "completed" ) {
             listItemEl.querySelector( "select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
         }
+
+        
     
         // Increment the 'task-id' value.
         taskIdCounter++; 
