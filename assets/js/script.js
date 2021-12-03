@@ -1,6 +1,6 @@
 
 // Define the button variable for later use. 
-//var buttonEl = document.querySelector("#save-task");     // mvoved the listener to the form itself 
+//var buttonEl = document.querySelector("#save-task");     // moved the listener to the form itself 
 
 // Define the variable for the event listener for the form. 
 var formEl = document.querySelector( "#task-form" );
@@ -18,7 +18,7 @@ var pageContentEl = document.querySelector( "#page-content" );
 var tasksInProgressEl = document.querySelector( "#tasks-in-progress" );
 var tasksCompletedEl  = document.querySelector( "#tasks-completed" );
 
-// Define an empty array, which will hold "task objects" to enable persistence (using 'localstorage').
+// Define an empty array, which will hold "task objects" to enable persistence (using 'local-storage').
 var tasks = [];             // this will eventually hold 'task objects', for storage and retrieval.
 
 
@@ -455,7 +455,7 @@ var loadTasks = function() {
 // The "submit" event is invoked when a button with 'type=submit' is clicked, or the user presses '[Enter]'. 
 formEl.addEventListener( "submit", taskFormHandler );
 
-// Add the evemnt listener for the main page to determine when the edit/delete/action controls were activated.
+// Add the event listener for the main page to determine when the edit/delete/action controls were activated.
 pageContentEl.addEventListener( "click", taskButtonHandler );
 
 // Add an event listenter for the main page to detect a change in task status
