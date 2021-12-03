@@ -2,6 +2,7 @@
 
 # A Task (Kanban Board) Project
 Richard Ay, August 2020
+(Revised December 2021)
 
 ## Table of Contents
 * [Project Objective](#project-objective)
