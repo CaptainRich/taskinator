@@ -18,12 +18,13 @@
         <!-- Add the form so we can create new tasks. -->
         <form id="task-form">
             <div class="form-group">   <!-- This is the input field for the task name. -->
-                <input type="text" name="task-name" class="text-input" placeholder="Enter Task Name" />
+                <input type="text" name="task-name" class="text-input" placeholder="Enter a New Task Name" />
             </div>
 
             <div class="form-group">   <!-- Define the valid "task type selections".-->
-                <select name="task-type" class="select-dropdown">
-                    <option value="">Pick a task type</option>
+                <select name="task-type" class="select-dropdown">   <!-- This creates a drop down list. -->
+                    <!-- The 'disabled selected' properties show the text but the option can't be selected.-->
+                    <option value="" disabled selected >Pick a task type</option>
                     <option value="Print">Print</option>
                     <option value="Web">Web</option>
                     <option value="Mobile">Mobile</option>

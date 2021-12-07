@@ -2,7 +2,8 @@
 // Define the button variable for later use. 
 //var buttonEl = document.querySelector("#save-task");     // moved the listener to the form itself 
 
-// Define the variable for the event listener for the form. 
+// Define the variable for the event listener for the form.   This is to allow the 'form' to listen
+// instead of just the button.  This allows '[Enter]' to be used to submit the form in addition to the button.
 var formEl = document.querySelector( "#task-form" );
 
 // Define a variable for the "to do list". 
