@@ -30,7 +30,9 @@ var taskFormHandler = function( event ) {
 
     event.preventDefault();                 // prevent the browser from reloading the page. 
 
-    // Obtain the task name and type just defined from the input form. 
+    // Obtain the task name and type just defined from the input form.   The brackets [] allow
+    // the selection of an HTML element by one of its attributes.  The '.value' property obtains
+    // the value of the 'input' object.
     var taskNameInput = document.querySelector( "input[name='task-name']").value;
     var taskTypeInput = document.querySelector( "select[name='task-type']").value;
 
