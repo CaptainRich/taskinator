@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Taskinator</title>
+    <title>Task Board</title>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
     <header>
         <!-- Setup the top of the page that we will interact with. -->
-        <h1 class="page-title">Taskinator</h1>
+        <h1 class="page-title">Task Board</h1>
         <p>Click the button below to add a new task!</p>
     
         <!-- Add the form so we can create new tasks. -->
@@ -44,25 +44,31 @@
         <!-- Define the actual task area. -->
         <!-- Section 1: Defined tasks not started. -->
         <section class="task-list-wrapper">
-            <h2 class="list-title">Tasks To Do</h2>
+            <h2 class="list-title">To Do</h2>
             <ul class="task-list" id="tasks-to-do"></ul>
         </section>
     
         <!-- Section 2: Tasks in-progress. -->
         <section class="task-list-wrapper">
-            <h2 class="list-title">Tasks in Progress</h2>
+            <h2 class="list-title">In Progress</h2>
             <ul class="task-list" id="tasks-in-progress"></ul>
         </section>
 
          <!-- Section 3: Defined tasks completed. -->
          <section class="task-list-wrapper">
-            <h2 class="list-title">Tasks Completed</h2>
+            <h2 class="list-title">Completed</h2>
             <ul class="task-list" id="tasks-completed"></ul>
-        </section>       
+        </section>   
+        
+         <!-- Section 4: Defined tasks accepted/approved. -->
+         <section class="task-list-wrapper">
+            <h2 class="list-title">Accepted/Approved</h2>
+            <ul class="task-list" id="tasks-accepted"></ul>
+        </section>      
     </main>
 
     <footer>
-        &copy;2020 by Taskinator
+        &copy;2020 by Task Board
     </footer>
     
     <!-- Load the Javascript file. -->

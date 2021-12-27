@@ -9,7 +9,7 @@ var formEl = document.querySelector( "#task-form" );
 // Define a variable for the "to do list". 
 var tasksToDoEl = document.querySelector( "#tasks-to-do" );
 
-// Define a variable to be used as a task ID value. */
+// Define a variable to be used as a task ID value, incremented with each newly added task. */
 var taskIdCounter = 0;
 
 // Define a variable for the main page so an event listener for the action buttons can be implemented.
