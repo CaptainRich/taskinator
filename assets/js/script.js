@@ -38,11 +38,11 @@ var taskFormHandler = function( event ) {
 
     // Verify that input was provided to both form controls. 
     if( !taskNameInput  ||  !taskTypeInput ) {
-        alert( "You need to define a task and select a type!");
+        alert( "You need to define a task as well as select a type!");
         return false;
     }
 
-    // Blank out any earlier data from the form. 
+    // Blank out any earlier data on the <form> element. 
     formEl.reset();                              // this works since 'formEl' is global. 
 
     // Detect if a task is being added (created) or edited
