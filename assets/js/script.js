@@ -124,8 +124,8 @@ var createTaskEl = function( taskDataObj ){
 
     // Put things all together using .appendChild 
     listItemEl.appendChild( taskInfoEl );                    // this adds the 'h3' and 'span' data 
-    var taskActionsEl = createTaskActions( taskIdCounter );  // create the action buttons
-    listItemEl.appendChild( taskActionsEl );                 // add the buttons to the 'li'
+    var taskActionsEl = createTaskActions( taskIdCounter );  // create the action selection list for this task
+    listItemEl.appendChild( taskActionsEl );                 // add the list to the 'li'
     tasksToDoEl.appendChild( listItemEl );                   // add the new "li"  to its parent, the "ul" item    
 
     // Update the 'task object' with its task id value, then put the oject into the array.
@@ -170,7 +170,7 @@ var createTaskActions = function( taskId ) {
     actionContainerEl.appendChild( statusSelectEl );           // add the new HTML element to the 'div'}
 
     // Define the options for the drop-list.
-    var statusChoices = [ "To Do", "In Progress", "Completed" ];
+    var statusChoices = [ "To Do", "In Progress", "Completed", "Accepted/Approved" ];
 
     for( var i = 0; i < statusChoices.length; i++ ) {
 
