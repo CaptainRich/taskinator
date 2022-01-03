@@ -18,6 +18,7 @@ var pageContentEl = document.querySelector( "#page-content" );
 // Define variables need to track the task status
 var tasksInProgressEl = document.querySelector( "#tasks-in-progress" );
 var tasksCompletedEl  = document.querySelector( "#tasks-completed" );
+var tasksAcceptedEl   = document.querySelector( "#tasks-accepted" );
 
 // Define an empty array, which will hold "task objects" to enable persistence (using 'local-storage').
 var tasks = [];             // this will eventually hold 'task objects', for storage and retrieval.
@@ -82,18 +83,22 @@ var taskStatusChangeHandler = function( event ) {
     // Find the parent task item element based on id
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']" );
 
-    // Based on the selected option, put the task in the corresponding column.
+    // Based on the selected option, put the task in the corresponding column.  Here the
+    // appendChild method actually moves the task in the DOM.
 
-    if( statusValue === "to do") {
-        tasksToDoEl.appendChild( taskSelected );
+    if (statusValue === "to do") {
+        tasksToDoEl.appendChild(taskSelected);
     }
-    else if( statusValue === "in progress" ) {
-        tasksInProgressEl.appendChild( taskSelected );
+    else if (statusValue === "in progress") {
+        tasksInProgressEl.appendChild(taskSelected);
     }
-    else if ( statusValue === "completed" ) {
-        tasksCompletedEl.appendChild( taskSelected );
+    else if (statusValue === "completed") {
+        tasksCompletedEl.appendChild(taskSelected);
+    }
+    else if (statusValue === "accepted/approved") {
+        tasksAcceptedEl.appendChild(taskSelected);
+    }
 
-    }
 
     // Make sure the proper status is maintained in the 'tasks' array for proper persistence.
     for( var i = 0; i < tasks.length; i++ ) {
@@ -257,9 +262,10 @@ var completeEditTask = function( taskName, taskType, taskId ) {
     saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
 
 
-    alert( "Task has been updated!" );
+    //alert( "Task has been updated!" );
 
     // Reset the form by removing the 'data-task-id' and putting the button text back to normal
+    // Removing the 'data-task-id' attribute enables new tasks to be added again.
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
 }
@@ -362,6 +368,9 @@ var dropTaskHandler = function( event ) {
     else if( statusType === "tasks-completed" ){
         statusSelectEl.selectedIndex = 2;
     }
+    else if( statusType === "tasks-accepted" ){
+        statusSelectEl.selectedIndex = 3;
+    }
 
     // Append the dropped task to its new parent list.
     dropZoneEl.appendChild( draggableElement );
@@ -444,8 +453,10 @@ var loadTasks = function() {
             listItemEl.querySelector( "select[name='status-change']").selectedIndex = 2;
             tasksCompletedEl.appendChild(listItemEl);
         }
-
-        
+        else if( tasks[i].status === "accepted/approved" ) {
+            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 3;
+            tasksAcceptedEl.appendChild(listItemEl);
+        }
     
         // Increment the 'task-id' value.
         taskIdCounter++; 
@@ -462,16 +473,16 @@ formEl.addEventListener( "submit", taskFormHandler );
 // Add the event listener for the main page to determine when the edit/delete/action controls were activated.
 pageContentEl.addEventListener( "click", taskButtonHandler );
 
-// Add an event listenter for the main page to detect a change in task status
+// Add an event listener for the main page to detect a change in task status
 pageContentEl.addEventListener( "change", taskStatusChangeHandler );
 
-// Add an event listenter for the main page to detect the drag/drop action
+// Add an event listener for the main page to detect the drag/drop action
 pageContentEl.addEventListener( "dragstart", dragTaskHandler );
 
 // Add an event listener for the 'drag over' event.
 pageContentEl.addEventListener( "dragover", dropZoneDragHandler );
 
-// Add an evet listener for the 'drop' event.
+// Add an event listener for the 'drop' event.
 pageContentEl.addEventListener( "drop", dropTaskHandler );
 
 // Add an event listener for the 'drag leave' event.
