@@ -45,7 +45,8 @@ var taskFormHandler = function( event ) {
     // Blank out any earlier data on the <form> element. 
     formEl.reset();                              // this works since 'formEl' is global. 
 
-    // Detect if a task is being added (created) or edited
+    // Detect if a task is being added (created) or edited. Edited tasks will have a "data-task-id" value,
+    // newly created tasks will not have this attribute.
     var isEdit = formEl.hasAttribute( "data-task-id" );
 
     // Based on whether or not the form has the 'data-task-id' decide if we are adding
@@ -226,7 +227,7 @@ var editTask = function( taskId ){
     document.querySelector("select[name='task-type']").value = taskType;
 
     // Change the button text from 'Edit' to 'Save Task'
-    document.querySelector("#save-task").textContent = "Save Task";
+    document.querySelector("#save-task").textContent = "Save Edited Task";
 
     // Create a new attribute so we don't lose the 'taskId'
     formEl.setAttribute( "data-task-id", taskId );
