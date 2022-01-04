@@ -317,7 +317,7 @@ var dropZoneDragHandler = function( event ) {
     // Determine if the dropzone is over a "task list", which is what we want
     var taskListEl = event.target.closest(".task-list");
 
-    // Disable the default behavior preventing us dropping this object
+    // If over a "task list", disable the default behavior which is preventing us from dropping this object
     if( taskListEl ) {
         event.preventDefault();
 
@@ -346,7 +346,7 @@ var dragLeaveHandler = function( event ) {
 // Define the event handler function for the 'drop' event.
 var dropTaskHandler = function( event ) {
 
-    // Get the drop target's id
+    // Get the id of the task being dropped, which we stored earlier in the dataTransfer area of the object
     var id = event.dataTransfer.getData( "text/plain" );
 
     // Get the id of the 'dragged' task item.
@@ -360,16 +360,16 @@ var dropTaskHandler = function( event ) {
     var statusSelectEl = draggableElement.querySelector("select[name='status-change']");
     
     if( statusType === "tasks-to-do" )  {
-        statusSelectEl.selectedIndex = 0;
+        statusSelectEl.selectedIndex = 0;  // the "to-do" list has index 0
     }
     else if( statusType === "tasks-in-progress" ){
-        statusSelectEl.selectedIndex = 1;
+        statusSelectEl.selectedIndex = 1;  // the "in-progress" list has index 1
     }
     else if( statusType === "tasks-completed" ){
-        statusSelectEl.selectedIndex = 2;
+        statusSelectEl.selectedIndex = 2;  // the "completed" list has index 2
     }
     else if( statusType === "tasks-accepted" ){
-        statusSelectEl.selectedIndex = 3;
+        statusSelectEl.selectedIndex = 3;  // the "accepted/approved" list has index 3
     }
 
     // Append the dropped task to its new parent list.
@@ -416,7 +416,7 @@ var loadTasks = function() {
     tasks = JSON.parse( tasks );
     
  
-    // Iterate throught the array and create the tasks elements on the page.
+    // Iterate through the array and create the tasks elements on the page.
     for( var i = 0; i < tasks.length; i++ ) {
 
         tasks[i].id = taskIdCounter;            // reassign the task Id values.
