@@ -335,6 +335,7 @@ var dragLeaveHandler = function( event ) {
 
         // Determine if we are 'leaving' a "task list" zone, and if so remove the style
         var taskListEl = event.target.closest(".task-list");
+        
         if( taskListEl ) {
             taskListEl.removeAttribute( "style" );
         }
