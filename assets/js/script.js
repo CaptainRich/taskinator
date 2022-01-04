@@ -78,7 +78,7 @@ var taskStatusChangeHandler = function( event ) {
     // Get the Id of the task item to be moved.
     var taskId = event.target.getAttribute("data-task-id");
 
-    // Get the currently selected opition (the current status), and convert to lower case
+    // Get the currently selected option (the current status), and convert to lower case
     var statusValue = event.target.value.toLowerCase();
 
     // Find the parent task item element based on id
@@ -133,9 +133,26 @@ var createTaskEl = function( taskDataObj ){
     listItemEl.appendChild( taskInfoEl );                    // this adds the 'h3' and 'span' data 
     var taskActionsEl = createTaskActions( taskIdCounter );  // create the action selection list for this task
     listItemEl.appendChild( taskActionsEl );                 // add the list to the 'li'
-    tasksToDoEl.appendChild( listItemEl );                   // add the new "li"  to its parent, the "ul" item    
 
-    // Update the 'task object' with its task id value, then put the oject into the array.
+    // Since we could be reloading saved tasks from local storage, put the task in the proper category based on 
+    // its "type", from the object passed in.
+
+    console.log( taskDataObj );
+
+    if( taskDataObj.status === "to do" ) {
+        tasksToDoEl.appendChild( listItemEl );                   // add the new "li"  to its parent, the "ul" item    
+    }
+    else if( taskDataObj.status === "in progress" ) {
+        tasksInProgressEl.appendChild( listItemEl );             // add the new "li"  to its parent, the "ul" item    
+    }
+    else if( taskDataObj.status === "completed" ) {
+        tasksCompletedEl.appendChild( listItemEl );              // add the new "li"  to its parent, the "ul" item    
+    }
+    else if( taskDataObj.status === "accepted/approved" ) {
+        tasksAcceptedEl.appendChild( listItemEl );               // add the new "li"  to its parent, the "ul" item    
+    }
+
+    // Update the 'task object' with its task id value, then put the object into the array.
     taskDataObj.id = taskIdCounter;
     tasks.push( taskDataObj );             // now push (put) this object into the array 'tasks'
     saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
@@ -172,7 +189,7 @@ var createTaskActions = function( taskId ) {
     var statusSelectEl = document.createElement( "select" );
     statusSelectEl.className = "select-status";                // give the drop-list classes
     statusSelectEl.setAttribute( "name", "status-change" );
-    statusSelectEl.setAttribute( "data-task-id", taskId );     // asign custom data to the list
+    statusSelectEl.setAttribute( "data-task-id", taskId );     // assign custom data to the list
 
     actionContainerEl.appendChild( statusSelectEl );           // add the new HTML element to the 'div'}
 
@@ -407,61 +424,21 @@ var saveTasks = function() {
 var loadTasks = function() {
 
     // Get the tasks from local storage
-    tasks = localStorage.getItem( "tasks" );
+    var savedTasks = localStorage.getItem( "tasks" );
 
-    if( tasks === null ) {
-        tasks= [];
+    if (!savedTasks) {
         return false;             // nothing in browsers local storage
     }
  
     // Convert the tasks from stringified format back into an array of objects
-    tasks = JSON.parse( tasks );
+    savedTasks = JSON.parse( savedTasks );
     
  
     // Iterate through the array and create the tasks elements on the page.
-    for( var i = 0; i < tasks.length; i++ ) {
+    for( var i = 0; i < savedTasks.length; i++ ) {
+        // Send each task object to the 'createTaskEl()' function.
+        createTaskEl( savedTasks[i] );
 
-        tasks[i].id = taskIdCounter;            // reassign the task Id values (taskIdCounter is global, 0 at startup)
-
-        var listItemEl = document.createElement( "li" );   // create the "li" item/selector. 
-        listItemEl.className = "task-item";                // assign the proper class to this new item. 
-    
-        // Add a 'task-id' value as a custom attribute, so we know which task is which. 
-        listItemEl.setAttribute("data-task-id", tasks[i].id );
-        listItemEl.setAttribute("draggable", "true");      // also set this element to be draggable
-    
-        // Create a 'div' to hold the task info and add it to the list item just created. 
-        var taskInfoEl = document.createElement( "div" );
-        taskInfoEl.className = "task-info";                // give the 'div' a class name
-    
-        // Add content and style to this new 'div' element 
-        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
-    
-        // Put things all together using .appendChild 
-        listItemEl.appendChild( taskInfoEl );                    // this adds the 'h3' and 'span' data 
-        var taskActionsEl = createTaskActions( tasks[i].id );    // create the action buttons
-        listItemEl.appendChild( taskActionsEl );                 // add the buttons to the 'li'
-      
-        // Now we need to put the tasks into the appropriate status columns
-        if( tasks[i].status === "to do" ) {
-            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 0;
-            tasksToDoEl.appendChild(listItemEl);
-        }
-        else if( tasks[i].status === "in progress" ) {
-            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 1;
-            tasksInProgressEl.appendChild(listItemEl);
-        }
-        else if( tasks[i].status === "completed" ) {
-            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 2;
-            tasksCompletedEl.appendChild(listItemEl);
-        }
-        else if( tasks[i].status === "accepted/approved" ) {
-            listItemEl.querySelector( "select[name='status-change']").selectedIndex = 3;
-            tasksAcceptedEl.appendChild(listItemEl);
-        }
-    
-        // Increment the 'task-id' value.
-        taskIdCounter++; 
     }
 }
 
