@@ -25,6 +25,7 @@ var tasks = [];             // this will eventually hold 'task objects', for sto
 
 
 
+// /////////////////////////////////////////////////////////////////////////////////// 
 // ///////////////////////////////////////////////////////////////////////////////////  
 //Define an anonymous function to create a new task item  
 var taskFormHandler = function( event ) {
@@ -136,7 +137,7 @@ var createTaskEl = function( taskDataObj ){
 
     // Update the 'task object' with its task id value, then put the oject into the array.
     taskDataObj.id = taskIdCounter;
-    tasks.push( taskDataObj );             // now push (put) this object into the array 'taskDataObj'
+    tasks.push( taskDataObj );             // now push (put) this object into the array 'tasks'
     saveTasks();                           // save the current array of tasks objects to the browsers 'localStorage' area.
 
     // Increment the 'task-id' value.
@@ -394,7 +395,7 @@ var dropTaskHandler = function( event ) {
 // Define the function to save all the tasks to 'localStorage'
 var saveTasks = function() {
 
-    // When pushing to 'localStorage' (which converts everything to a string), use a JSON converstion 
+    // When pushing to 'localStorage' (which converts everything to a string), use a JSON conversion 
     // so we can have a visual of what got stored.
     localStorage.setItem( "tasks", JSON.stringify(tasks) );
  
@@ -420,7 +421,7 @@ var loadTasks = function() {
     // Iterate through the array and create the tasks elements on the page.
     for( var i = 0; i < tasks.length; i++ ) {
 
-        tasks[i].id = taskIdCounter;            // reassign the task Id values.
+        tasks[i].id = taskIdCounter;            // reassign the task Id values (taskIdCounter is global, 0 at startup)
 
         var listItemEl = document.createElement( "li" );   // create the "li" item/selector. 
         listItemEl.className = "task-item";                // assign the proper class to this new item. 
