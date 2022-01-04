@@ -137,7 +137,7 @@ var createTaskEl = function( taskDataObj ){
     // Since we could be reloading saved tasks from local storage, put the task in the proper category based on 
     // its "type", from the object passed in.
 
-    console.log( taskDataObj );
+    //console.log( taskDataObj );
 
     if( taskDataObj.status === "to do" ) {
         tasksToDoEl.appendChild( listItemEl );                   // add the new "li"  to its parent, the "ul" item    
